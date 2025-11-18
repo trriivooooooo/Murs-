@@ -1,0 +1,519 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+-- SAVE / LOAD NAMES
+local SAVENAME = "trivosogoud"
+local LOADNAME = "trivosogoud"
+
+----------------------------------------------------
+-- NOTIFY USER
+----------------------------------------------------
+Rayfield:Notify({
+    Title = "Patronize",
+    Content = "gurt yo plz give me robux or something in return of this. also I put a list of who can use this (by Roblox userID)",
+    Duration = 4.5,
+    Image = 4483362458,
+})
+
+----------------------------------------------------
+-- WINDOW
+----------------------------------------------------
+local Window = Rayfield:CreateWindow({
+    Name = "Make a Server 4 Ever",
+    Icon = 0,
+    LoadingTitle = "Loading yo MaS stuff",
+    LoadingSubtitle = "By @Trivo101nikua37 (IdleSteamPunkk) XD",
+    ShowText = "Toggle 4 Mobile",
+    Theme = "Ocean",
+
+    ToggleUIKeybind = "K",
+
+    DisableRayfieldPrompts = true,
+    DisableBuildWarnings = false,
+
+    ConfigurationSaving = {
+        Enabled = false,     -- IMPORTANT: Disabled = cannot load configuration
+        FolderName = nil,
+        FileName = "The MaS Expansion"
+    },
+
+    Discord = {
+        Enabled = false,
+        Invite = "noinvitelink",
+        RememberJoins = true
+    },
+
+    KeySystem = true,
+    KeySettings = {
+        Title = "The Catalyst.",
+        Subtitle = "NUCLEAR CORE",
+        Note = "ask Trivo gng",
+        FileName = "DUDEGEANAWHATTHEAHSBAADCBH",
+        SaveKey = true,
+        GrabKeyFromSite = false,
+        Key = {"idlesteampunkk"}
+    }
+})
+
+----------------------------------------------------
+-- TABS
+----------------------------------------------------
+local Main = Window:CreateTab("Main", 4483362458)
+local Misc = Window:CreateTab("Misc", 4483362458)
+local Settings = Window:CreateTab("Settings", 4483362458)
+local Info = Window:CreateTab("Info - u should read", 4483362458)
+
+----------------------------------------------------
+-- INFO SECTIONS
+----------------------------------------------------
+Info:CreateSection("This was created by Van / Trivo")
+Info:CreateSection("Script made with support yes")
+Info:CreateSection("parts get made 1.1k per second and displays part count in console")
+Info:CreateSection("save input = file save name")
+Info:CreateSection("load input = file load name")
+
+
+----------------------------------------------------
+-- MISC BUTTONS
+----------------------------------------------------
+Misc:CreateButton({
+    Name = "Destroy GUI",
+    Callback = function()
+        Rayfield:Destroy()
+    end,
+})
+
+Main:CreateButton({
+    Name = "devious shenanigans (dont click unless btools) ",
+    Callback = function()
+        for i,v in pairs(game.workspace:GetDescendants()) do if v:IsA("BasePart") then local args = {
+	"SyncMove1",
+	{
+		{
+			Part = v,
+			CFrame = CFrame.new(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+		}
+	}
+}
+game:GetService("Players").LocalPlayer.Character:WaitForChild("Building Tools"):WaitForChild("SyncAPI"):WaitForChild("ServerEndpoint"):InvokeServer(unpack(args)) task.wait()
+end end 
+    end,
+})
+
+----------------------------------------------------
+-- MAIN BUTTONS
+----------------------------------------------------
+Main:CreateButton({
+    Name = "Move Spawnpoint 20000 studs sideways",
+    Callback = function()
+        for i,v in pairs(game.workspace:GetDescendants()) do if v:IsA("SpawnLocation") then local args = {
+	"SyncMove1",
+	{
+		{
+			Part = v,
+			CFrame = CFrame.new(20000, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+		}
+	}
+}
+game:GetService("Players").LocalPlayer.Character:WaitForChild("Building Tools"):WaitForChild("SyncAPI"):WaitForChild("ServerEndpoint"):InvokeServer(unpack(args)) 
+end end
+    end,
+})
+
+Main:CreateButton({
+    Name = "Destroy all Player Models",
+    Callback = function()
+        for _, v in pairs(game.Players:GetPlayers()) do
+            if v.Character then
+                v.Character:Destroy()
+            end
+        end
+    end,
+})
+
+Main:CreateButton({
+    Name = "Destroy all Mesh Module",
+    Callback = function()
+        local cache = {}
+        for _, v in pairs(game.Workspace:GetDescendants()) do
+            if v:IsA("MeshPart") then
+                table.insert(cache, v)
+            end
+        end
+        for _, part in ipairs(cache) do
+            part:Destroy()
+        end
+    end,
+})
+
+----------------------------------------------------
+-- SAVE INPUT
+----------------------------------------------------
+Settings:CreateInput({
+    Name = "File name for save",
+    CurrentValue = "gurt yo",
+    PlaceholderText = "gurt",
+    RemoveTextAfterFocusLost = false,
+    Flag = "Savi",
+    Callback = function(text)
+        SAVENAME = text
+    end,
+})
+
+----------------------------------------------------
+-- LOAD INPUT
+----------------------------------------------------
+Settings:CreateInput({
+    Name = "File name for loading",
+    CurrentValue = "gurt yo",
+    PlaceholderText = "gurt",
+    RemoveTextAfterFocusLost = false,
+    Flag = "Loadi",
+    Callback = function(text)
+        LOADNAME = text
+    end,
+})
+
+----------------------------------------------------
+-- SAVE GUI (EXPORT)
+----------------------------------------------------
+Main:CreateButton({
+    Name = "save GUI (use file name)",
+    Callback = function()
+
+        local Players = game:GetService("Players")
+        local Workspace = game:GetService("Workspace")
+        local player = Players.LocalPlayer
+
+        local function getMaterialName(material)
+            return typeof(material) == "EnumItem" and material.Name or material or "Plastic"
+        end
+
+        local function getAllParts()
+            local parts = {}
+            for _, obj in ipairs(Workspace:GetDescendants()) do
+                if obj:IsA("BasePart") then
+                    table.insert(parts, obj)
+                end
+            end
+            return parts
+        end
+
+        local function serializeVector3(v)
+            return string.format("Vector3.new(%f, %f, %f)", v.X, v.Y, v.Z)
+        end
+
+        local function serializeColor3(c)
+            return string.format("Color3.new(%f, %f, %f)", c.R, c.G, c.B)
+        end
+
+        local function serializeCFrame(cf)
+            return string.format("CFrame.new(%s)", table.concat({cf:GetComponents()}, ", "))
+        end
+
+        local function exportParts(parts)
+            local t = {}
+            for _, p in ipairs(parts) do
+                local entry = {
+                    ClassName = p.ClassName,
+                    CFrame = p.CFrame,
+                    Size = p.Size,
+                    Color = p.Color,
+                    Material = getMaterialName(p.Material),
+                    Transparency = p.Transparency,
+                    CanCollide = p.CanCollide,
+                }
+                if p:IsA("Part") then
+                    entry.Shape = p.Shape.Name
+                end
+                table.insert(t, entry)
+            end
+            return t
+        end
+
+        local function serializeTable(tbl)
+            local lines = {"return {"}
+            for _, v in ipairs(tbl) do
+                table.insert(lines, "    {")
+                table.insert(lines, ("        ClassName = %q,"):format(v.ClassName))
+                if v.Shape then
+                    table.insert(lines, ("        Shape = %q,"):format(v.Shape))
+                end
+                table.insert(lines, ("        CFrame = %s,"):format(serializeCFrame(v.CFrame)))
+                table.insert(lines, ("        Size = %s,"):format(serializeVector3(v.Size)))
+                table.insert(lines, ("        Color = %s,"):format(serializeColor3(v.Color)))
+                table.insert(lines, ("        Material = %q,"):format(v.Material))
+                table.insert(lines, ("        Transparency = %f,"):format(v.Transparency))
+                table.insert(lines, ("        CanCollide = %s,"):format(tostring(v.CanCollide)))
+                table.insert(lines, "    },")
+            end
+            table.insert(lines, "}")
+            return table.concat(lines, "\n")
+        end
+
+        -- Export GUI
+        local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+        local frame = Instance.new("Frame", gui)
+        frame.Size = UDim2.new(0, 250, 0, 120)
+        frame.Position = UDim2.new(.5, -125, .5, -60)
+        frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+
+        local button = Instance.new("TextButton", frame)
+        button.Size = UDim2.new(0, 230, 0, 40)
+        button.Position = UDim2.new(0, 10, 0, 10)
+        button.Text = "lowkey part export"
+        button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        button.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+        button.MouseButton1Click:Connect(function()
+            local exportString = serializeTable(exportParts(getAllParts()))
+            if writefile then
+                writefile(SAVENAME, exportString)
+            elseif setclipboard then
+                setclipboard(exportString)
+            end
+            gui:Destroy()
+        end)
+
+    end,
+})
+
+----------------------------------------------------
+-- LOAD FILE
+----------------------------------------------------
+
+Main:CreateButton({
+    Name = "load file yo",
+    Callback = function()
+        local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+local player = Players.LocalPlayer
+
+-- Wait for server endpoint
+local function waitForServerEndpoint(timeout)
+    timeout = timeout or 5
+    local startTime = os.clock()
+
+    while os.clock() - startTime < timeout do
+        local char = player.Character
+        local buildingTools = char and char:FindFirstChild("Building Tools")
+        local syncAPI = buildingTools and buildingTools:FindFirstChild("SyncAPI")
+        local serverEndpoint = syncAPI and syncAPI:FindFirstChild("ServerEndpoint")
+
+        if serverEndpoint and serverEndpoint:IsA("RemoteFunction") then
+            return serverEndpoint
+        end
+
+        task.wait(0.2)
+    end
+
+    return nil
+end
+
+local serverEndpoint = waitForServerEndpoint()
+if not serverEndpoint then
+    warn("Building Tools' ServerEndpoint not found. Make sure Building Tools is equipped.")
+    return
+end
+
+if not readfile then
+    warn("readfile not available in this environment.")
+    return
+end
+
+local str
+local success, err = pcall(function()
+    str = readfile(LOADNAME)
+end)
+
+if not success then
+    warn("Failed to read file:", err)
+    return
+end
+
+local ok, partsData = pcall(function()
+    return loadstring(str)()
+end)
+
+if not ok or type(partsData) ~= "table" then
+    warn("Failed to load parts data from file.")
+    return
+end
+
+local partTypeMap = {
+    Part = "Normal",
+    WedgePart = "Wedge",
+    CornerWedgePart = "Corner",
+    VehicleSeat = "Vehicle Seat",
+    Seat = "Seat",
+    TrussPart = "Truss"
+}
+
+local shapeToBType = {
+    Block = "Normal",
+    Ball = "Ball",
+    Cylinder = "Cylinder"
+}
+
+local function safeInvoke(...)
+    local args = { ... }
+    local ok, res = pcall(function()
+        return serverEndpoint:InvokeServer(table.unpack(args))
+    end)
+
+    if not ok then
+        warn("safeInvoke error:", res)
+    end
+
+    return ok, res
+end
+
+-- Create a batch of parts
+local function createPartsBatch(batch)
+    local spawned = {}
+    local remaining = #batch
+
+    local conn
+    conn = Workspace.ChildAdded:Connect(function(child)
+        if child:IsA("BasePart") then
+            for i = 1, #batch do
+                if not spawned[i] then
+                    spawned[i] = child
+                    remaining -= 1
+                    break
+                end
+            end
+
+            if remaining <= 0 then
+                conn:Disconnect()
+            end
+        end
+    end)
+
+    for _, info in ipairs(batch) do
+        local btype
+
+        if info.ClassName == "Part" and info.Shape then
+            btype = shapeToBType[info.Shape] or partTypeMap[info.ClassName] or "Normal"
+        else
+            btype = partTypeMap[info.ClassName] or "Normal"
+        end
+
+        task.spawn(function()
+            safeInvoke("CreatePart1", btype, info.CFrame, Workspace)
+        end)
+    end
+
+    -- Wait for parts to appear
+    local timer = 0
+    while remaining > 0 and timer < 5 do
+        task.wait(0.1)
+        timer += 0.1
+    end
+
+    if remaining > 0 then
+        warn(("%d parts didn't appear within timeout."):format(remaining))
+    end
+
+    if conn and conn.Connected then
+        conn:Disconnect()
+    end
+
+    return spawned
+end
+
+-- Sync parts after spawning
+local function syncBatch(partsList, batchInfos)
+    local resizeTbl = {}
+    local colorTbl = {}
+    local appearanceTbl = {}
+    local behaviorTbl = {}
+
+    for i, inst in ipairs(partsList) do
+        local info = batchInfos[i]
+        if inst and info then
+
+            table.insert(resizeTbl, {
+                Part = inst,
+                CFrame = info.CFrame,
+                Size = info.Size
+            })
+
+            table.insert(colorTbl, {
+                Part = inst,
+                Color = info.Color,
+                UnionColoring = false
+            })
+
+            local matEnum = Enum.Material[info.Material] or Enum.Material.Plastic
+            local appearanceEntry = { Part = inst, Material = matEnum }
+
+            if info.Transparency and info.Transparency > 0 then
+                appearanceEntry.Transparency = info.Transparency
+            end
+
+            table.insert(appearanceTbl, appearanceEntry)
+
+            if info.ClassName == "Part" and info.Shape then
+                local shapeEnum = Enum.PartType[info.Shape]
+                if shapeEnum then
+                    table.insert(behaviorTbl, { Part = inst, Shape = shapeEnum })
+                end
+            end
+
+            if info.CanCollide ~= nil then
+                table.insert(behaviorTbl, { Part = inst, CanCollide = info.CanCollide })
+            end
+        end
+    end
+
+    if #resizeTbl > 0 then safeInvoke("SyncResize1", resizeTbl) end
+    if #colorTbl > 0 then safeInvoke("SyncColor1", colorTbl) end
+    if #appearanceTbl > 0 then safeInvoke("SyncAppearance1", appearanceTbl) end
+    if #behaviorTbl > 0 then safeInvoke("SyncBehavior1", behaviorTbl) end
+end
+
+local function chunkTable(tbl, size)
+    local out = {}
+
+    for i = 1, #tbl, size do
+        table.insert(out, { table.unpack(tbl, i, math.min(i + size - 1, #tbl)) })
+    end
+
+    return out
+end
+
+-- Main import function
+local function importPartsBatched(partsTable, batchSize)
+    batchSize = batchSize or 1100
+
+    local batches = chunkTable(partsTable, batchSize)
+    local total = #partsTable
+    local imported = 0
+
+    for _, batchInfos in ipairs(batches) do
+        local spawned = createPartsBatch(batchInfos)
+        syncBatch(spawned, batchInfos)
+
+        task.wait(0.6)
+
+        for _, inst in ipairs(spawned) do
+            if inst then imported += 1 end
+        end
+
+        task.wait(0.2)
+    end
+
+    print(("Import complete! %d / %d parts imported successfully."):format(imported, total))
+end
+
+importPartsBatched(partsData)
+
+    end,
+})
+
+----------------------------------------------------
+-- SAFE LOAD CONFIG
+----------------------------------------------------
+pcall(function()
+    Rayfield:LoadConfiguration()
+end)

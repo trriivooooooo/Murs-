@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clever | Portal</title>
+    <style>
+        :root {
+            --bg-dark: #121217;
+            --card-bg: #1e1e26;
+            --accent-gradient: linear-gradient(135deg, #ffcc33 0%, #ff3366 50%, #7022ff 100%);
+            --text-main: #ffffff;
+            --text-dim: #a0a0b0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--bg-dark);
+            background: radial-gradient(circle at center, #2d1b33 0%, #121217 100%);
+            margin: 0;
+            overflow: hidden;
+            color: var(--text-main);
+        }
+
+        /* Access Denied Overlay */
+        #denied-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-dark);
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .app-container {
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        #mathHomeworkButton {
+            position: relative;
+            background: var(--card-bg);
+            color: var(--text-main);
+            padding: 3rem 1.5rem;
+            border: none;
+            border-radius: 24px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            z-index: 1;
+        }
+
+        #mathHomeworkButton::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -10%;
+            width: 120%;
+            height: 60%;
+            background: var(--accent-gradient);
+            transform: rotate(-15deg);
+            z-index: -1;
+            opacity: 0.9;
+        }
+
+        #mathHomeworkButton:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        .sub-text {
+            margin-top: 15px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .logout-btn {
+            margin-top: 30px;
+            color: #ff4757;
+            font-size: 0.7rem;
+            cursor: pointer;
+            text-decoration: underline;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;"> 
+
+    <div id="denied-screen">
+        <h1 style="letter-spacing: 5px;">SYSTEM//LOCKED</h1>
+        <p style="color: var(--text-dim);">Authentication//required//via//Main//Hub.</p>
+    </div>
+
+    <div class="app-container" id="main-ui">
+        <button id="mathHomeworkButton">Launch Portal</button>
+        <div class="sub-text" id="nodeStatus">Secure Access Node</div>
+        <div class="logout-btn" onclick="terminate()">Terminate Session</div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('mathHomeworkButton');
+        const status = document.getElementById('nodeStatus');
+        const deniedScreen = document.getElementById('denied-screen');
+        const mainUI = document.getElementById('main-ui');
+
+        function checkAccess() {
+            const isUnlocked = localStorage.getItem('isUnlocked');
+            const userName = localStorage.getItem('userName') || "User";
+
+            if (isUnlocked !== 'true') {
+                deniedScreen.style.display = 'flex';
+                mainUI.style.display = 'none';
+                return;
+            }
+
+            if (userName.toLowerCase().startsWith("file executor")) {
+                btn.innerText = "Launch Core";
+                status.innerText = "Admin Node: " + userName;
+                status.style.color = "#ffcc33";
+            } else {
+                btn.innerText = "Planet//Shaper";
+                status.innerText = "Active Session: " + userName;
+            }
+        }
+
+        async function openPortal() {
+            const url = "https://cdn.jsdelivr.net/gh/gn-math/gn-math-DONTDMCA@main/singlefile.html";
+            const newWindow = window.open('about:blank', '_blank');
+            if (!newWindow) {
+                alert("Please enable popups for this site.");
+                return;
+            }
+            try {
+                newWindow.document.write('<h1 style="font-family:sans-serif; color:#333;">Loading Portal...</h1>');
+                const res = await fetch(url);
+                const text = await res.text();
+                newWindow.document.open();
+                newWindow.document.write(text);
+                newWindow.document.close();
+            } catch (e) {
+                newWindow.document.body.innerHTML = "Error loading content.";
+            }
+        }
+        
+        btn.onclick = () => openPortal();
+
+        function terminate() {
+            localStorage.removeItem('isUnlocked');
+            localStorage.removeItem('userName');
+            location.reload();
+        }
+
+        document.onkeydown = (e) => {
+            if ((e.ctrlKey && [85, 83, 73].includes(e.keyCode)) || e.keyCode === 123) return false;
+        };
+
+        checkAccess();
+    </script>
+</body>
+</html>
+

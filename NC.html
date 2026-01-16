@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executor | Portal</title>
+    <style>
+        :root {
+            --bg-dark: #121217;
+            --card-bg: #1e1e26;
+            --accent-yellow: #f1c40f;
+            --accent-pink: #e84393;
+            --accent-purple: #6c5ce7;
+            --text-main: #ffffff;
+            --text-dim: #a0a0b0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #2d1b33 0%, #121217 100%);
+            margin: 0;
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* Access Denied Overlay */
+        #denied-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-dark);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .profile-card {
+            position: relative;
+            width: 340px;
+            background: var(--card-bg);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            padding-bottom: 40px;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .profile-card.drag-over {
+            transform: scale(1.02);
+            border-color: var(--accent-pink);
+        }
+
+        .header-stripes {
+            position: relative;
+            height: 160px;
+            background: var(--card-bg);
+            overflow: hidden;
+        }
+
+        .stripe { 
+            position: absolute; 
+            width: 150%; 
+            height: 40px; 
+            left: -25%; 
+            transform: rotate(-35deg); 
+        }
+        .stripe.yellow { background: var(--accent-yellow); top: 10px; }
+        .stripe.pink   { background: var(--accent-pink); top: 55px; }
+        .stripe.purple { background: var(--accent-purple); top: 100px; }
+
+        .profile-avatar {
+            position: absolute;
+            top: 45px; left: 50%; transform: translateX(-50%);
+            width: 70px; height: 70px; background: #3d3d4d;
+            border-radius: 50%; border: 4px solid var(--card-bg);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px; z-index: 10;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .content { padding: 20px; }
+
+        h1 {
+            margin: 20px 0 0 0;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        #user-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            background: rgba(255,255,255,0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-top: 5px;
+            color: var(--accent-yellow);
+            font-weight: bold;
+            display: none; /* Hidden by default */
+        }
+
+        p {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin: 15px 0 25px 0;
+            line-height: 1.4;
+        }
+
+        .upload-label {
+            display: inline-block;
+            background: var(--accent-purple);
+            color: white;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        .upload-label:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+        
+        #fileInput { display: none; }
+
+        .logout {
+            margin-top: 20px;
+            display: block;
+            font-size: 0.75rem;
+            color: #ff4757;
+            text-decoration: none;
+            cursor: pointer;
+            opacity: 0.6;
+        }
+        .logout:hover { opacity: 1; }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div id="denied-overlay">
+        <h1>ACCESS DENIED</h1>
+        <p>Please log in through the main portal.</p>
+    </div>
+
+    <div class="profile-card" id="dropZone">
+        <div class="header-stripes">
+            <div class="stripe yellow"></div>
+            <div class="stripe pink"></div>
+            <div class="stripe purple"></div>
+            <div class="profile-avatar" id="avatar">⚡</div>
+        </div>
+        <div class="content">
+            <h1 id="main-title">FILE OPENER</h1>
+            <div id="user-badge">SYSTEM ADMIN</div>
+            <p id="status-text">Authenticated Session Active.<br>Drop an HTML file or click below.</p>
+            
+            <label for="fileInput" class="upload-label">CHOOSE FILE</label>
+            <input type="file" id="fileInput" accept=".html" />
+            
+            <a class="logout" onclick="logout()"></a>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. SESSION & USER DETECTION ---
+        function checkAuth() {
+            const isUnlocked = localStorage.getItem('isUnlocked');
+            const userName = localStorage.getItem('userName') || "User";
+            const overlay = document.getElementById('denied-overlay');
+            const badge = document.getElementById('user-badge');
+            const title = document.getElementById('main-title');
+            const avatar = document.getElementById('avatar');
+
+            // Block access if not logged in
+            if (isUnlocked !== 'true') {
+                overlay.style.display = 'flex';
+                return;
+            }
+
+            // Check if name starts with "file executor"
+            if (userName.toLowerCase().startsWith("file executor")) {
+                badge.style.display = 'inline-block';
+                badge.innerText = `LEVEL: ADMIN (${userName})`;
+                title.innerText = "CORE EXECUTOR";
+                avatar.innerText = "🛡️";
+                document.querySelector('.profile-card').style.borderColor = "var(--accent-yellow)";
+            } else {
+                badge.style.display = 'inline-block';
+                badge.innerText = `HELLO, ${userName}`;
+                badge.style.color = "var(--accent-pink)";
+            }
+        }
+
+        // --- 2. FILE EXECUTION LOGIC ---
+        const fileInput = document.getElementById('fileInput');
+        const dropZone = document.getElementById('dropZone');
+
+        fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(name => {
+            dropZone.addEventListener(name, e => {
+                e.preventDefault();
+                e.stopPropagation();
+            }, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(name => {
+            dropZone.addEventListener(name, () => dropZone.classList.add('drag-over'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(name => {
+            dropZone.addEventListener(name, () => dropZone.classList.remove('drag-over'), false);
+        });
+
+        dropZone.addEventListener('drop', e => handleFile(e.dataTransfer.files[0]));
+
+        function handleFile(file) {
+            if (file && (file.type === 'text/html' || file.name.endsWith('.html'))) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const win = window.open();
+                    if (win) {
+                        win.document.write(e.target.result);
+                        win.document.close();
+                    } else {
+                        alert("Please allow pop-ups to execute the file.");
+                    }
+                };
+                reader.readAsText(file);
+            } else if (file) {
+                alert("Invalid format. Only .html files are supported.");
+            }
+        }
+
+        // --- 3. UTILITIES ---
+        function logout() {
+            localStorage.removeItem('isUnlocked');
+            localStorage.removeItem('userName');
+            location.reload();
+        }
+
+        // Anti-inspect (F12, Ctrl+U, Ctrl+Shift+I)
+        document.onkeydown = (e) => {
+            if ((e.ctrlKey && [85, 83, 73].includes(e.keyCode)) || e.keyCode === 123) return false;
+        };
+
+        // Run Auth check on load
+        checkAuth();
+    </script>
+</body>
+</html>
+

@@ -3,257 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Executor | Portal</title>
+    <title>nuclear executor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
     <style>
         :root {
-            --bg-dark: #121217;
+            --bg-dark: #0f0f13;
             --card-bg: #1e1e26;
             --accent-yellow: #f1c40f;
             --accent-pink: #e84393;
             --accent-purple: #6c5ce7;
             --text-main: #ffffff;
-            --text-dim: #a0a0b0;
+            --code-bg: #15151b;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: radial-gradient(circle at center, #2d1b33 0%, #121217 100%);
-            margin: 0;
-            color: var(--text-main);
+            font-family: 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at center, #1a101d 0%, #0f0f13 100%);
+            margin: 0; color: var(--text-main);
+            height: 100vh; display: flex; justify-content: center; align-items: center;
             overflow: hidden;
         }
 
         /* Access Denied Overlay */
         #denied-overlay {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-dark);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            position: fixed; inset: 0; background: var(--bg-dark);
+            display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 1000;
         }
 
-        .profile-card {
-            position: relative;
-            width: 340px;
-            background: var(--card-bg);
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            padding-bottom: 40px;
-            text-align: center;
-            border: 2px solid rgba(255,255,255,0.05);
-            transition: transform 0.3s ease, border-color 0.3s ease;
+        .container {
+            width: 95%; max-width: 1000px; height: 85vh;
+            background: var(--card-bg); border-radius: 20px;
+            display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .profile-card.drag-over {
-            transform: scale(1.02);
-            border-color: var(--accent-pink);
+        .header { height: 6px; display: flex; }
+        .h-strip { flex: 1; }
+
+        .toolbar {
+            padding: 15px 25px; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .header-stripes {
-            position: relative;
-            height: 160px;
-            background: var(--card-bg);
-            overflow: hidden;
+        /* Editor Area */
+        .editor-wrapper {
+            position: relative; flex-grow: 1; overflow: hidden;
+            background: var(--code-bg); margin: 15px; border-radius: 10px;
         }
 
-        .stripe { 
-            position: absolute; 
-            width: 150%; 
-            height: 40px; 
-            left: -25%; 
-            transform: rotate(-35deg); 
-        }
-        .stripe.yellow { background: var(--accent-yellow); top: 10px; }
-        .stripe.pink   { background: var(--accent-pink); top: 55px; }
-        .stripe.purple { background: var(--accent-purple); top: 100px; }
-
-        .profile-avatar {
-            position: absolute;
-            top: 45px; left: 50%; transform: translateX(-50%);
-            width: 70px; height: 70px; background: #3d3d4d;
-            border-radius: 50%; border: 4px solid var(--card-bg);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 30px; z-index: 10;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        #editing, #highlighting {
+            margin: 0; padding: 15px; border: 0;
+            width: 100%; height: 100%;
+            position: absolute; top: 0; left: 0;
+            tab-size: 4; font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 14px; line-height: 20px;
+            white-space: pre; overflow: auto; box-sizing: border-box;
         }
 
-        .content { padding: 20px; }
-
-        h1 {
-            margin: 20px 0 0 0;
-            font-size: 1.4rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+        #editing {
+            color: transparent; background: transparent;
+            caret-color: white; z-index: 1; resize: none; outline: none;
         }
 
-        #user-badge {
-            display: inline-block;
-            font-size: 0.7rem;
-            background: rgba(255,255,255,0.1);
-            padding: 4px 10px;
-            border-radius: 20px;
-            margin-top: 5px;
-            color: var(--accent-yellow);
-            font-weight: bold;
-            display: none; /* Hidden by default */
-        }
+        #highlighting { pointer-events: none; z-index: 0; }
 
-        p {
-            color: var(--text-dim);
-            font-size: 0.85rem;
-            margin: 15px 0 25px 0;
-            line-height: 1.4;
+        /* Buttons */
+        .btn-group { display: flex; gap: 10px; }
+        .btn {
+            padding: 8px 18px; border-radius: 6px; border: none;
+            font-weight: 600; cursor: pointer; transition: 0.2s;
+            font-size: 12px; text-transform: uppercase;
         }
+        .btn-run { background: var(--accent-purple); color: white; }
+        .btn-save { background: #27ae60; color: white; }
+        .btn-load { background: #444; color: white; }
+        .btn:hover { transform: translateY(-1px); filter: brightness(1.2); }
 
-        .upload-label {
-            display: inline-block;
-            background: var(--accent-purple);
-            color: white;
-            padding: 14px 40px;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3);
-        }
-
-        .upload-label:hover {
-            filter: brightness(1.1);
-            transform: translateY(-2px);
-        }
-        
         #fileInput { display: none; }
-
-        .logout {
-            margin-top: 20px;
-            display: block;
-            font-size: 0.75rem;
-            color: #ff4757;
-            text-decoration: none;
-            cursor: pointer;
-            opacity: 0.6;
-        }
-        .logout:hover { opacity: 1; }
+        .status-bar { padding: 5px 25px; font-size: 11px; color: #666; background: #15151b; }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <div id="denied-overlay">
-        <h1>ACCESS DENIED</h1>
-        <p>Please log in through the main portal.</p>
+    <div id="denied-overlay"><h1>ACCESS DENIED</h1></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="h-strip" style="background: var(--accent-yellow)"></div>
+            <div class="h-strip" style="background: var(--accent-pink)"></div>
+            <div class="h-strip" style="background: var(--accent-purple)"></div>
+        </div>
+
+        <div class="toolbar">
+            <div>
+                <span style="font-weight: bold; letter-spacing: 1px;">just execute code</span>
+                <span id="filename-display" style="margin-left: 15px; color: var(--accent-yellow); font-size: 12px;">untitled.html</span>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-load" onclick="document.getElementById('fileInput').click()">load file</button>
+                <button class="btn btn-run" onclick="executeBlob()">▶ Run</button>
+                <button class="btn btn-save" onclick="downloadFile()">💾 Save</button>
+            </div>
+            <input type="file" id="fileInput" accept=".html" onchange="loadFile(this)" />
+        </div>
+
+        <div class="editor-wrapper">
+            <textarea id="editing" spellcheck="false" oninput="updateEditor(this.value); syncScroll(this);" onscroll="syncScroll(this)"></textarea>
+            <pre id="highlighting" aria-hidden="true"><code class="language-html" id="highlighting-content"></code></pre>
+        </div>
+
+        <div class="status-bar" id="status">Ready • UTF-8 • HTML Mode by Jayden all rights reserved!</div>
     </div>
 
-    <div class="profile-card" id="dropZone">
-        <div class="header-stripes">
-            <div class="stripe yellow"></div>
-            <div class="stripe pink"></div>
-            <div class="stripe purple"></div>
-            <div class="profile-avatar" id="avatar">⚡</div>
-        </div>
-        <div class="content">
-            <h1 id="main-title">FILE OPENER</h1>
-            <div id="user-badge">SYSTEM ADMIN</div>
-            <p id="status-text">Authenticated Session Active.<br>Drop an HTML file or click below.</p>
-            
-            <label for="fileInput" class="upload-label">CHOOSE FILE</label>
-            <input type="file" id="fileInput" accept=".html" />
-            
-            <a class="logout" onclick="logout()"></a>
-        </div>
-    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
 
     <script>
-        // --- 1. SESSION & USER DETECTION ---
-        function checkAuth() {
-            const isUnlocked = localStorage.getItem('isUnlocked');
-            const userName = localStorage.getItem('userName') || "User";
-            const overlay = document.getElementById('denied-overlay');
-            const badge = document.getElementById('user-badge');
-            const title = document.getElementById('main-title');
-            const avatar = document.getElementById('avatar');
+        const editArea = document.getElementById('editing');
+        const highlightArea = document.getElementById('highlighting-content');
+        const displayFile = document.getElementById('filename-display');
+        let currentFileName = "index.html";
 
-            // Block access if not logged in
-            if (isUnlocked !== 'true') {
-                overlay.style.display = 'flex';
-                return;
-            }
-
-            // Check if name starts with "file executor"
-            if (userName.toLowerCase().startsWith("file executor")) {
-                badge.style.display = 'inline-block';
-                badge.innerText = `LEVEL: ADMIN (${userName})`;
-                title.innerText = "CORE EXECUTOR";
-                avatar.innerText = "🛡️";
-                document.querySelector('.profile-card').style.borderColor = "var(--accent-yellow)";
-            } else {
-                badge.style.display = 'inline-block';
-                badge.innerText = `HELLO, ${userName}`;
-                badge.style.color = "var(--accent-pink)";
-            }
+        // --- 1. SYNC & HIGHLIGHT LOGIC ---
+        function updateEditor(text) {
+            // Replace brackets for HTML safety in the highlight layer
+            let result = text.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+            highlightArea.innerHTML = result;
+            Prism.highlightElement(highlightArea);
         }
 
-        // --- 2. FILE EXECUTION LOGIC ---
-        const fileInput = document.getElementById('fileInput');
-        const dropZone = document.getElementById('dropZone');
+        function syncScroll(el) {
+            document.getElementById('highlighting').scrollTop = el.scrollTop;
+            document.getElementById('highlighting').scrollLeft = el.scrollLeft;
+        }
 
-        fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
-
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(name => {
-            dropZone.addEventListener(name, e => {
+        // Handle Tab key
+        editArea.onkeydown = function(e) {
+            if(e.key == "Tab") {
                 e.preventDefault();
-                e.stopPropagation();
-            }, false);
-        });
-
-        ['dragenter', 'dragover'].forEach(name => {
-            dropZone.addEventListener(name, () => dropZone.classList.add('drag-over'), false);
-        });
-
-        ['dragleave', 'drop'].forEach(name => {
-            dropZone.addEventListener(name, () => dropZone.classList.remove('drag-over'), false);
-        });
-
-        dropZone.addEventListener('drop', e => handleFile(e.dataTransfer.files[0]));
-
-        function handleFile(file) {
-            if (file && (file.type === 'text/html' || file.name.endsWith('.html'))) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const win = window.open();
-                    if (win) {
-                        win.document.write(e.target.result);
-                        win.document.close();
-                    } else {
-                        alert("Please allow pop-ups to execute the file.");
-                    }
-                };
-                reader.readAsText(file);
-            } else if (file) {
-                alert("Invalid format. Only .html files are supported.");
+                let s = this.selectionStart;
+                this.value = this.value.substring(0, s) + "    " + this.value.substring(this.selectionEnd);
+                this.selectionEnd = s + 4;
+                updateEditor(this.value);
             }
-        }
-
-        // --- 3. UTILITIES ---
-        function logout() {
-            localStorage.removeItem('isUnlocked');
-            localStorage.removeItem('userName');
-            location.reload();
-        }
-
-        // Anti-inspect (F12, Ctrl+U, Ctrl+Shift+I)
-        document.onkeydown = (e) => {
-            if ((e.ctrlKey && [85, 83, 73].includes(e.keyCode)) || e.keyCode === 123) return false;
         };
 
-        // Run Auth check on load
+        // --- 2. FILE OPS ---
+        function loadFile(input) {
+            const file = input.files[0];
+            if (file) {
+                currentFileName = file.name;
+                displayFile.innerText = currentFileName;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    editArea.value = e.target.result;
+                    updateEditor(e.target.result);
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function executeBlob() {
+            const blob = new Blob([editArea.value], { type: 'text/html' });
+            window.open(URL.createObjectURL(blob));
+        }
+
+        function downloadFile() {
+            const blob = new Blob([editArea.value], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = currentFileName;
+            a.click();
+        }
+
+        // --- 3. AUTH & INIT ---
+        function checkAuth() {
+            if (localStorage.getItem('isUnlocked') !== 'true') {
+                document.getElementById('denied-overlay').style.display = 'flex';
+            }
+        }
+
+        // Initialize with boilerplate
+        const starter = `<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #111; color: #fff; font-family: sans-serif; text-align: center; padding-top: 50px; }\n  </style>\n</head>\n<body>\n  <h1>New Project</h1>\n  <p>Edit the code and click RUN.</p>\n</body>\n</html>`;
+        editArea.value = starter;
+        updateEditor(starter);
         checkAuth();
     </script>
 </body>

@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>nuclear executor</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <title>executor</title>
     <style>
         :root {
             --bg-dark: #0f0f13;
@@ -24,7 +23,6 @@
             overflow: hidden;
         }
 
-        /* Access Denied Overlay */
         #denied-overlay {
             position: fixed; inset: 0; background: var(--bg-dark);
             display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 1000;
@@ -45,7 +43,6 @@
             background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* Editor Area */
         .editor-wrapper {
             position: relative; flex-grow: 1; overflow: hidden;
             background: var(--code-bg); margin: 15px; border-radius: 10px;
@@ -55,19 +52,19 @@
             margin: 0; padding: 15px; border: 0;
             width: 100%; height: 100%;
             position: absolute; top: 0; left: 0;
-            tab-size: 4; font-family: 'Fira Code', 'Consolas', monospace;
+            tab-size: 4; font-family: 'Consolas', 'Monaco', monospace;
             font-size: 14px; line-height: 20px;
             white-space: pre; overflow: auto; box-sizing: border-box;
         }
 
         #editing {
-            color: transparent; background: transparent;
+            color: #fff; background: transparent;
             caret-color: white; z-index: 1; resize: none; outline: none;
         }
 
-        #highlighting { pointer-events: none; z-index: 0; }
+        /* Highlighting layer is kept for structure but disabled visual logic */
+        #highlighting { pointer-events: none; z-index: 0; display: none; }
 
-        /* Buttons */
         .btn-group { display: flex; gap: 10px; }
         .btn {
             padding: 8px 18px; border-radius: 6px; border: none;
@@ -96,7 +93,7 @@
 
         <div class="toolbar">
             <div>
-                <span style="font-weight: bold; letter-spacing: 1px;">just execute code</span>
+                <span style="font-weight: bold; letter-spacing: 1px;">EXECUTOR</span>
                 <span id="filename-display" style="margin-left: 15px; color: var(--accent-yellow); font-size: 12px;">untitled.html</span>
             </div>
             <div class="btn-group">
@@ -108,85 +105,96 @@
         </div>
 
         <div class="editor-wrapper">
-            <textarea id="editing" spellcheck="false" oninput="updateEditor(this.value); syncScroll(this);" onscroll="syncScroll(this)"></textarea>
-            <pre id="highlighting" aria-hidden="true"><code class="language-html" id="highlighting-content"></code></pre>
+            <textarea id="editing" spellcheck="false" oninput="handleInput(this.value)"></textarea>
         </div>
 
-        <div class="status-bar" id="status">Ready • UTF-8 • HTML Mode by Jayden all rights reserved!</div>
+        <div class="status-bar" id="status">Made by ########</div>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
 
     <script>
         const editArea = document.getElementById('editing');
-        const highlightArea = document.getElementById('highlighting-content');
         const displayFile = document.getElementById('filename-display');
+        const statusText = document.getElementById('status');
+        
         let currentFileName = "index.html";
+        let largeFileContent = ""; 
+        let isLargeFile = false;
 
-        // --- 1. SYNC & HIGHLIGHT LOGIC ---
-        function updateEditor(text) {
-            // Replace brackets for HTML safety in the highlight layer
-            let result = text.replace(/&/g, "&amp;").replace(/</g, "&lt;");
-            highlightArea.innerHTML = result;
-            Prism.highlightElement(highlightArea);
+        function handleInput(val) {
+            isLargeFile = false; 
+            largeFileContent = ""; 
         }
 
-        function syncScroll(el) {
-            document.getElementById('highlighting').scrollTop = el.scrollTop;
-            document.getElementById('highlighting').scrollLeft = el.scrollLeft;
-        }
-
-        // Handle Tab key
         editArea.onkeydown = function(e) {
             if(e.key == "Tab") {
                 e.preventDefault();
                 let s = this.selectionStart;
                 this.value = this.value.substring(0, s) + "    " + this.value.substring(this.selectionEnd);
                 this.selectionEnd = s + 4;
-                updateEditor(this.value);
             }
         };
 
-        // --- 2. FILE OPS ---
         function loadFile(input) {
             const file = input.files[0];
+            const MAX_SIZE = 3 * 1024 * 1024; 
+
             if (file) {
                 currentFileName = file.name;
                 displayFile.innerText = currentFileName;
+
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    editArea.value = e.target.result;
-                    updateEditor(e.target.result);
+                    const content = e.target.result;
+                    if (file.size > MAX_SIZE) {
+                        isLargeFile = true;
+                        largeFileContent = content;
+                        editArea.value = ""; 
+                        statusText.innerText = `Loaded: ${file.name} (${(file.size/1024/1024).toFixed(2)}MB). Ready to execute.`;
+                    } else {
+                        isLargeFile = false;
+                        largeFileContent = "";
+                        editArea.value = content;
+                        statusText.innerText = `Loaded ${file.name} successfully.`;
+                    }
                 };
                 reader.readAsText(file);
             }
         }
 
         function executeBlob() {
-            const blob = new Blob([editArea.value], { type: 'text/html' });
-            window.open(URL.createObjectURL(blob));
+            const codeToRun = isLargeFile ? largeFileContent : editArea.value;
+            if (!codeToRun.trim()) return;
+
+            const blob = new Blob([codeToRun], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            const newWindow = window.open();
+            if (newWindow) {
+                newWindow.location.href = url;
+            } else {
+                alert("Please allow pop-ups to run your code.");
+            }
         }
 
         function downloadFile() {
-            const blob = new Blob([editArea.value], { type: 'text/html' });
+            const codeToSave = isLargeFile ? largeFileContent : editArea.value;
+            if (!codeToSave.trim()) return;
+
+            const blob = new Blob([codeToSave], { type: 'text/html' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = currentFileName;
             a.click();
         }
 
-        // --- 3. AUTH & INIT ---
         function checkAuth() {
             if (localStorage.getItem('isUnlocked') !== 'true') {
                 document.getElementById('denied-overlay').style.display = 'flex';
             }
         }
 
-        // Initialize with boilerplate
-        const starter = `<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #111; color: #fff; font-family: sans-serif; text-align: center; padding-top: 50px; }\n  </style>\n</head>\n<body>\n  <h1>New Project</h1>\n  <p>Edit the code and click RUN.</p>\n</body>\n</html>`;
+        const starter = `<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #111; color: #fff; font-family: sans-serif; text-align: center; padding-top: 50px; }\n  </style>\n</head>\n<body>\n  <h1>Ready</h1>\n  <button onclick="document.body.requestFullscreen()">Test Fullscreen</button>\n</body>\n</html>`;
         editArea.value = starter;
-        updateEditor(starter);
         checkAuth();
     </script>
 </body>
